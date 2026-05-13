@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
@@ -15,6 +16,8 @@ public class Main {
             System.out.println("5. Видалити користувача (за ID)");
             System.out.println("6. Показати загальну кількість унікальних користувачів");
             System.out.println("7. Вивести список усіх користувачів");
+            System.out.println("8. Вивести відсортований список (за логіном)");
+            System.out.println("9. Вивести відфільтрований список (тільки онлайн)");
             System.out.println("0. Вихід");
             System.out.print("Оберіть дію: ");
 
@@ -24,9 +27,8 @@ public class Main {
                 System.out.println("Будь ласка, введіть число.");
                 continue;
             }
+
             try {
-
-
                 switch (choice) {
                     case 1:
                         System.out.print("Введіть логін: ");
@@ -64,16 +66,29 @@ public class Main {
                     case 7:
                         registry.displayAllUsers();
                         break;
+                    case 8:
+                        System.out.println("Сортування за логіном:");
+                        LinkedList<User> sortedList = registry.getInOrder((u1, u2) -> u1.getName().compareTo(u2.getName()));
+                        for (User u : sortedList) System.out.println(u);
+                        break;
+                    case 9:
+                        System.out.println("Список користувачів онлайн:");
+                        LinkedList<User> onlineUsers = registry.getFiltered(u -> u.isLoggedIn());
+                        if (onlineUsers.isEmpty()) {
+                            System.out.println("Зараз нікого немає онлайн.");
+                        } else {
+                            for (User u : onlineUsers) System.out.println(u);
+                        }
+                        break;
                     case 0:
                         System.out.println("Роботу завершено.");
                         break;
                     default:
                         System.out.println("Невірний вибір. Спробуйте ще раз.");
                 }
-            } catch (NumberFormatException e){
-                System.out.println("Помилка при введенні числового значення. Спробуйте ще раз!");
+            } catch (Exception e) {
+                System.out.println("Сталася помилка. Спробуйте ще раз!");
             }
-
         }
         s.close();
     }
