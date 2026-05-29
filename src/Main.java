@@ -5,6 +5,15 @@ public class Main {
     public static void main(String[] args) {
         UserRegistry registry = new UserRegistry();
         Scanner s = new Scanner(System.in);
+
+        System.out.print("Бажаєте відновити базу користувачів з файлу? (1 - Так, 0 - Ні): ");
+        String loadChoice = s.nextLine();
+        if ("1".equals(loadChoice)) {
+            System.out.print("Введіть шлях до файлу (наприклад, users.dat): ");
+            String path = s.nextLine();
+            registry.loadFromFile(path);
+        }
+
         int choice = -1;
 
         while (choice != 0) {
@@ -81,6 +90,14 @@ public class Main {
                         }
                         break;
                     case 0:
+
+                        System.out.print("Бажаєте зберегти базу користувачів у файл перед виходом? (1 - Так, 0 - Ні): ");
+                        String saveChoice = s.nextLine();
+                        if ("1".equals(saveChoice)) {
+                            System.out.print("Введіть шлях до файлу (наприклад, users.dat): ");
+                            String path = s.nextLine();
+                            registry.saveToFile(path);
+                        }
                         System.out.println("Роботу завершено.");
                         break;
                     default:

@@ -1,11 +1,15 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private UserIdentifier identifier;
     private String password;
     private LocalDateTime lastLoginDate;
-    private boolean isLoggedIn;
+
+    private transient boolean isLoggedIn;
+
     private static int counter = 0;
 
     public User(String name, String password) {
@@ -19,11 +23,17 @@ public class User {
     public UserIdentifier getIdentifier() { return identifier; }
     public String getPassword() { return password; }
     public boolean isLoggedIn() { return isLoggedIn; }
+
     public void setLoggedIn(boolean loggedIn) {
         this.isLoggedIn = loggedIn;
     }
+
     public void setLastLoginDate(LocalDateTime lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
+    }
+
+    public static void setCounter(int newCounter) {
+        counter = newCounter;
     }
 
     @Override

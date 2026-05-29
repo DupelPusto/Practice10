@@ -1,3 +1,4 @@
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,6 +11,41 @@ public class UserRegistry {
 
     public UserRegistry() {
         this.users = new HashMap<>();
+    }
+
+    public void saveToFile(String filePath) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(users);
+            System.out.println("Базу користувачів успішно збережено у файл: " + filePath);
+        } catch (IOException e) {
+            System.out.println("Помилка при збереженні у файл: " + e.getMessage());
+        }
+    }
+
+
+    public void loadFromFile(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("Файл не знайдено. Створено порожню базу.");
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            users = (Map<UserIdentifier, User>) ois.readObject();
+            System.out.println("Базу користувачів успішно відновлено з файлу: " + filePath);
+
+
+            int maxId = -1;
+            for (UserIdentifier ui : users.keySet()) {
+                if (ui.getId() > maxId) {
+                    maxId = ui.getId();
+                }
+            }
+            User.setCounter(maxId + 1);
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Помилка при читанні з файлу: " + e.getMessage());
+        }
     }
 
     public void registerUser(String login, String password) {
